@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Restaurantes Cercanos</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+    <style>
+        #map {
+            height: 400px;
+            width: 100%;
+        }
+    </style>
+</head>
+<body class="bg-gray-100 font-sans leading-normal tracking-normal">
+    <div class="container mx-auto p-4">
+        <h1 class="text-3xl font-bold text-center text-gray-800 mb-4">Restaurantes Cercanos</h1>
+
+        <!-- Filtros -->
+        <div class="mb-4 flex gap-4">
+            <select id="categoryFilter" onchange="filterRestaurants()" class="px-3 py-2 border rounded shadow-sm">
+                <option value="">Todas las categorías</option>
+                <option value="italiano">Italiano</option>
+                <option value="bar">Bar</option>
+                <option value="café">Café</option>
+                <!-- Añadir más opciones según las categorías que necesites -->
+            </select>
+
+            <select id="priceFilter" onchange="filterRestaurants()" class="px-3 py-2 border rounded shadow-sm">
+                <option value="">Todos los rangos de precios</option>
+                <option value="económico">Económico</option>
+                <option value="moderado">Moderado</option>
+                <option value="caro">Caro</option>
+                <!-- Más opciones si lo necesitas -->
+            </select>
+        </div>
+
+        <!-- Lista de restaurantes -->
+        <ul id="restaurant-list" class="mb-6 space-y-4">
+            {% for restaurant in restaurants %}
+            <li 
+                class="bg-white p-4 rounded-lg shadow-md cursor-pointer"
+                onclick="highlightRestaurant({{ restaurant.latitude }}, {{ restaurant.longitude }}, '{{ restaurant.name }}', '{{ restaurant.address }}')"
+                data-category="{{ restaurant.category }}" 
+                data-price="{{ restaurant.price_range }}">
+                <h2 class="text-lg font-semibold">{{ restaurant.name }}</h2>
+                <p class="text-sm text-gray-600">{{ restaurant.address }}</p>
+                <p class="text-sm text-gray-600">Horario: {{ restaurant.opening_time }} - {{ restaurant.closing_time }}</p>
+            </li>
+            {% endfor %}
+        </ul>
+
+        <!-- Mapa -->
+        <div id="map" class="rounded-lg shadow-lg"></div>
+    </div>
+
+    <script>
+        // Función de filtrado
+        function filterRestaurants() {
+            const categoryFilter = document.getElementById('categoryFilter').value.toLowerCase();
+            const priceFilter = document.getElementById('priceFilter').value.toLowerCase();
+            const restaurantItems = document.querySelectorAll('#restaurant-list li');
+
+            restaurantItems.forEach(item => {
+                const itemCategory = item.getAttribute('data-category').toLowerCase();
+                const itemPrice = item.getAttribute('data-price').toLowerCase();
+                const categoryMatch = categoryFilter === '' || itemCategory === categoryFilter;
+                const priceMatch = priceFilter === '' || itemPrice === priceFilter;
+
+                if (categoryMatch && priceMatch) {
+                    item.style.display = '';
+                } else {
+                    item.style.display = 'none';
+                }
+            });
+        }
+
+        // Código para el mapa y resaltar el restaurante seleccionado
+        var map = L.map('map').setView([51.505, -0.09], 13); // Ajusta las coordenadas iniciales
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        }).addTo(map);
+
+        var markers = [];
+        var restaurants = [
+            {% for restaurant in restaurants %}
+            {
+                'name': '{{ restaurant.name }}',
+                'lat': {{ restaurant.latitude }},
+                'lng': {{ restaurant.longitude }},
+                'address': '{{ restaurant.address }}'
+            },
+            {% endfor %}
+        ];
+
+        restaurants.forEach(function(restaurant) {
+            var marker = L.marker([restaurant.lat, restaurant.lng])
+                .addTo(map)
+                .bindPopup('<b>' + restaurant.name + '</b><br>' + restaurant.address);
+            markers.push(marker);
+        });
+
+        function highlightRestaurant(lat, lng, name, address) {
+            map.setView([lat, lng], 15);
+            var selectedMarker = markers.find(m => m.getLatLng().lat === lat && m.getLatLng().lng === lng);
+            if (selectedMarker) {
+                selectedMarker.openPopup();
+            }
+        }
+    </script>
+</body>
+
