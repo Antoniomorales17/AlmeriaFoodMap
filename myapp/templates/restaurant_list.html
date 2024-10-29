@@ -43,11 +43,6 @@
                 
                 <!-- Mostrar la imagen del restaurante -->
                 <img src="{{ restaurant.image_url }}" alt="{{ restaurant.name }}" class="w-full h-32 object-cover rounded mb-2">
-
-
-
-
-                
                 <h2 class="text-lg font-semibold">{{ restaurant.name }}</h2>
                 
                 <!-- Información básica -->
@@ -88,13 +83,13 @@
         var restaurants = [
             {% for restaurant in restaurants %}
             {
-                'name': '{{ restaurant.name }}',
+                'name': '{{ restaurant.name|escapejs }}',
                 'lat': {{ restaurant.latitude }},
                 'lng': {{ restaurant.longitude }},
-                'address': '{{ restaurant.address }}',
-                'category': '{{ restaurant.category }}',
-                'price_range': '{{ restaurant.price_range }}',
-                'image_url': '{{ restaurant.image.url }}'
+                'address': '{{ restaurant.address|escapejs }}',
+                'category': '{{ restaurant.category|escapejs }}',
+                'price_range': '{{ restaurant.price_range|escapejs }}',
+                'image_url': '{{ restaurant.image.url|default:"" }}'
             },
             {% endfor %}
         ];
