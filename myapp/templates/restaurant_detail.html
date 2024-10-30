@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ restaurant.name }}</title>
+</head>
+<body>
+
+<h1>{{ restaurant.name }}</h1>
+<p>{{ restaurant.description }}</p>
+
+<!-- Mostrar las reseñas -->
+<h2>Reseñas:</h2>
+{% if reviews %}
+    <ul>
+        {% for review in reviews %}
+            <li>
+                <strong>{{ review.user_name }}</strong> - {{ review.rating }} estrellas
+                <p>{{ review.comment }}</p>
+                <small>Publicado el {{ review.date_posted|date:"d M Y" }}</small>
+            </li>
+        {% endfor %}
+    </ul>
+{% else %}
+    <p>No hay reseñas aún. ¡Sé el primero en dejar una!</p>
+{% endif %}
+
+<!-- Formulario para agregar una reseña -->
+<h2>Deja tu reseña</h2>
+<form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Enviar reseña</button>
+</form>
+
+</body>
+</html>

@@ -1,6 +1,8 @@
 import requests  # Necesario para realizar solicitudes a la API de Google
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from .models import Restaurant
+from .forms import ReviewForm
+
 
 # Función para obtener las coordenadas usando la API de Google Places y guardar en la base de datos
 def obtener_coordenadas_y_guardar(nombre):
@@ -53,3 +55,21 @@ def agregar_bar(request):
             return render(request, 'error.html', {'message': 'No se encontró el lugar.'})
     
     return render(request, 'agregar_bar.html')
+
+def restaurant_detail(request, restaurant_id):
+    restaurant = get_object_or_404(Restaurant, id=restaurant_id)
+    reviews = restaurant.reviews.all()  # Obtiene todas las reseñas para el restaurante
+    if request.method == 'POST':
+        form = ReviewForm(request.POST)
+        if form.is_valid():
+            review = form.save(commit=False)
+            review.restaurant = restaurant  # Asocia la reseña al restaurante actual
+            review.save()
+            return redirect('restaurant_detail', restaurant_id=restaurant.id)
+    else:
+        form = ReviewForm()
+    return render(request, 'restaurant_detail.html', {
+        'restaurant': restaurant,
+        'reviews': reviews,
+        'form': form
+    })

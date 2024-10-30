@@ -1,9 +1,6 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <!DOCTYPE html>
-<html lang="es">
-<head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>AlmeriaFoodMap</title>
@@ -68,7 +65,6 @@
             </select>
         </div>
 
-
         <!-- Lista de restaurantes en formato de tarjetas -->
         <div id="restaurant-list" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 mb-6">
             {% for restaurant in restaurants %}
@@ -89,6 +85,7 @@
             {% endfor %}
         </div>
 
+
         <!-- Mapa -->
         <div id="map" class="rounded-lg shadow-lg mt-6"></div>
     </div>
@@ -100,13 +97,9 @@
             const isLightTheme = body.classList.contains("light-theme");
             
             // Cambiar entre temas claro y oscuro
-            if (isLightTheme) {
-                body.classList.replace("light-theme", "dark-theme");
-                localStorage.setItem("theme", "dark");
-            } else {
-                body.classList.replace("dark-theme", "light-theme");
-                localStorage.setItem("theme", "light");
-            }
+            body.classList.toggle("light-theme", !isLightTheme);
+            body.classList.toggle("dark-theme", isLightTheme);
+            localStorage.setItem("theme", isLightTheme ? "light" : "dark");
         }
 
         // Establecer el tema guardado al cargar la página
@@ -121,69 +114,78 @@
         window.addEventListener("DOMContentLoaded", initTheme);
         
         // Configuración del mapa y de los restaurantes
-        var map = L.map('map').setView([36.8340, -2.4637], 13);
-
-        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-        }).addTo(map);
+        var map = L.map('map').setView([36.8346, -2.4576], 12);
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 19 }).addTo(map);
 
         var markers = [];
         var restaurants = [
-            {% for restaurant in restaurants %}
-            {
-                'name': '{{ restaurant.name|escapejs }}',
-                'lat': {{ restaurant.latitude }},
-                'lng': {{ restaurant.longitude }},
-                'address': '{{ restaurant.address|escapejs }}',
-                'category': '{{ restaurant.category|escapejs }}',
-                'price_range': '{{ restaurant.price_range|escapejs }}',
-            },
-            {% endfor %}
-        ];
+    // Asegúrate de que la lista de restaurantes tenga las coordenadas adecuadas
+    {% for restaurant in restaurants %}
+    {
+        name: "{{ restaurant.name }}",
+        address: "{{ restaurant.address }}",
+        lat: {{ restaurant.latitude }},
+        lng: {{ restaurant.longitude }},
+        category: "{{ restaurant.category }}",
+        price_range: "{{ restaurant.price_range }}",
+        image: "{% if restaurant.image %}{{ restaurant.image.url }}{% else %}''{% endif %}"
+    },
+    {% endfor %}
+];
+
 
         restaurants.forEach(function(restaurant) {
-            if (restaurant.lat && restaurant.lng) {
-                var popupContent = `
-                    <div style="text-align: center;">
-                        <b>${restaurant.name}</b><br>
-                        <p>${restaurant.address}</p>
-                    </div>
-                `;
-                var marker = L.marker([restaurant.lat, restaurant.lng])
-                    .addTo(map)
-                    .bindPopup(popupContent);
-
-                markers.push(marker);
-            }
+            var popupContent = `
+                <div style="text-align: center;">
+                    <b>${restaurant.name}</b><br>
+                    <p>${restaurant.address}</p>
+                </div>
+            `;
+            var marker = L.marker([restaurant.lat, restaurant.lng])
+                .addTo(map)
+                .bindPopup(popupContent);
+            markers.push(marker);
         });
 
-        function highlightRestaurant(lat, lng) {
+        // Resaltar el restaurante seleccionado en el mapa
+        function highlightRestaurant(lat, lng, name, address) {
             map.setView([lat, lng], 15);
-            var selectedMarker = markers.find(m => m.getLatLng().lat === lat && m.getLatLng().lng === lng);
-            if (selectedMarker) {
-                selectedMarker.openPopup();
-            }
+            markers.forEach(marker => {
+                marker.closePopup(); // Cerrar popups anteriores
+                if (marker.getLatLng().lat === lat && marker.getLatLng().lng === lng) {
+                    marker.openPopup(); // Abrir popup del restaurante seleccionado
+                }
+            });
         }
 
+        // Filtrar restaurantes por categoría y precio
         function filterRestaurants() {
-    const category = document.getElementById('categoryFilter').value.toLowerCase();
-    const price = document.getElementById('priceFilter').value.toLowerCase();
-    const restaurantList = document.querySelectorAll('#restaurant-list div');
+            var categoryFilter = document.getElementById('categoryFilter').value;
+            var priceFilter = document.getElementById('priceFilter').value;
 
-    restaurantList.forEach(function(restaurant) {
-        const restaurantCategory = restaurant.getAttribute('data-category').toLowerCase();
-        const restaurantPrice = restaurant.getAttribute('data-price').toLowerCase();
+            markers.forEach(marker => {
+                marker.remove(); // Eliminar todos los marcadores
+            });
+            markers = []; // Reiniciar el arreglo de marcadores
 
-        // Mostrar el restaurante solo si coincide con la categoría y el precio seleccionados
-        if ((category === "" || restaurantCategory === category) &&
-            (price === "" || restaurantPrice === price)) {
-            restaurant.style.display = "block";
-        } else {
-            restaurant.style.display = "none";
+            restaurants.forEach(function(restaurant) {
+                if ((categoryFilter === '' || restaurant.category === categoryFilter) &&
+                    (priceFilter === '' || restaurant.price_range === priceFilter)) {
+                    var popupContent = `
+                        <div style="text-align: center;">
+                            <b>${restaurant.name}</b><br>
+                            <p>${restaurant.address}</p>
+                        </div>
+                    `;
+                    var marker = L.marker([restaurant.lat, restaurant.lng])
+                        .addTo(map)
+                        .bindPopup(popupContent);
+                    markers.push(marker);
+                }
+            });
         }
-    });
-}
 
+        
     </script>
 </body>
 </html>
