@@ -1,17 +1,21 @@
 from pathlib import Path
-import dj_database_url
 import os
+import dj_database_url
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.getenv('DJANGO_SECRET_KEY', 'default-secret-key')  # Cambia 'default-secret-key' por algo seguro para desarrollo local
+# Usamos un secret key por defecto si no está en las variables de entorno.
+SECRET_KEY = os.getenv('DJANGO_SECRET_KEY', 'local-secret-key')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = os.getenv('DJANGO_DEBUG', 'False') == 'True'
+# Activamos DEBUG para ver detalles en local
+DEBUG = os.getenv('DJANGO_DEBUG', 'True') == 'True'
 
-ALLOWED_HOSTS = os.getenv('DJANGO_ALLOWED_HOSTS', '*').split(',')
+# Configuración para desarrollo local
+ALLOWED_HOSTS = ['127.0.0.1', 'localhost']
+
 
 # Application definition
 INSTALLED_APPS = [
@@ -26,6 +30,7 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -84,6 +89,7 @@ STATIC_URL = '/static/'
 STATICFILES_DIRS = [BASE_DIR / "static"]
 STATIC_ROOT = BASE_DIR / "staticfiles"  # Añadido para producción
 
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 
 # Media files

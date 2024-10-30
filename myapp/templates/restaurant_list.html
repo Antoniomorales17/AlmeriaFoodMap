@@ -1,22 +1,58 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Restaurantes Cercanos</title>
+    <!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>AlmeriaFoodMap</title>
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
-    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet" />
     <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
     <style>
+        /* Estilos del tema y mapa */
+        body.light-theme { background-color: #ffffff; color: #000000; }
+        body.dark-theme { background-color: #1a202c; color: #a0aec0; }
         #map { height: 500px; width: 100%; }
+        .theme-toggle { cursor: pointer; width: 24px; height: 24px; transition: transform 0.3s ease; }
+        .light-theme .theme-toggle { fill: #fbbf24; }
+        .dark-theme .theme-toggle { fill: #718096; transform: rotate(180deg); }
     </style>
 </head>
-<body class="bg-gray-100 font-sans leading-normal tracking-normal">
-    <div class="container mx-auto p-4">
-        <h1 class="text-3xl font-bold text-center text-gray-800 mb-4">Restaurantes Cercanos</h1>
+<body class="light-theme font-sans leading-normal tracking-normal">
 
-        <!-- Filtros -->
-        <div class="mb-4 flex gap-4">
+    <!-- Botón de cambio de tema -->
+    <div class="container mx-auto p-4 flex justify-end">
+        <svg onclick="toggleTheme()" class="theme-toggle" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M12 2a7 7 0 00-7 7c0 2.326 1.099 4.484 2.841 5.667L7.618 18h8.764l-1.223-3.333A6.966 6.966 0 0019 9a7 7 0 00-7-7zM9 21h6v2H9v-2z"></path>
+        </svg>
+    </div>
+
+    <!-- Título principal con ícono de mapa -->
+    <h1 class="text-3xl font-bold text-center mb-4">
+        <svg xmlns="http://www.w3.org/2000/svg" class="inline-block w-6 h-6 text-red-500 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 20l-5.447-2.724A2 2 0 013 15.382V5.618a2 2 0 011.105-1.794L9 1m0 0l5.447 2.724A2 2 0 0116 5.618v9.764a2 2 0 01-1.105 1.794L9 20z" />
+        </svg>
+        AlmeriaFoodMap
+    </h1>
+
+    <!-- Imagen de portada -->
+    <div class="relative h-64 w-full">
+        <img src="/static/cabo.jpg" alt="Iglesia de Cabo de Gata" class="object-cover w-full h-full rounded-lg shadow-md" />
+    </div>
+
+    <!-- Pregunta con ícono de comida -->
+    <div class="container mx-auto p-4">
+        <h2 class="text-3xl font-bold text-center mb-4">
+            <svg xmlns="http://www.w3.org/2000/svg" class="inline-block w-6 h-6 text-green-500 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" />
+            </svg>
+            ¿Dónde te gustaría comer hoy?
+        </h2>
+
+        <!-- Filtros de categoría y precio con íconos -->
+        <div class="mb-4 flex gap-4 justify-center">
             <select id="categoryFilter" onchange="filterRestaurants()" class="px-3 py-2 border rounded shadow-sm">
                 <option value="">Todas las categorías</option>
                 <option value="italiano">Italiano</option>
@@ -32,54 +68,66 @@
             </select>
         </div>
 
-        <!-- Lista de restaurantes -->
-        <ul id="restaurant-list" class="mb-6 space-y-4">
+
+        <!-- Lista de restaurantes en formato de tarjetas -->
+        <div id="restaurant-list" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 mb-6">
             {% for restaurant in restaurants %}
-            <li 
-                class="bg-white p-4 rounded-lg shadow-md cursor-pointer"
-                onclick="highlightRestaurant({{ restaurant.latitude }}, {{ restaurant.longitude }}, '{{ restaurant.name }}', '{{ restaurant.address }}')"
-                data-category="{{ restaurant.category }}" 
-                data-price="{{ restaurant.price_range }}">
-                
-                <!-- Mostrar la imagen del restaurante -->
-                <img src="{{ restaurant.image_url }}" alt="{{ restaurant.name }}" class="w-full h-32 object-cover rounded mb-2">
-                <h2 class="text-lg font-semibold">{{ restaurant.name }}</h2>
-                
-                <!-- Información básica -->
+            <div class="bg-white p-4 rounded-lg shadow-md cursor-pointer" onclick="highlightRestaurant({{ restaurant.latitude }}, {{ restaurant.longitude }}, '{{ restaurant.name }}', '{{ restaurant.address }}')" data-category="{{ restaurant.category }}" data-price="{{ restaurant.price_range }}">
+                {% if restaurant.image %}
+                <img src="{{ restaurant.image.url }}" alt="{{ restaurant.name }}" class="w-full h-32 object-cover rounded mb-2" />
+                {% else %}
+                <img src="/static/images/placeholder.png" alt="No disponible" class="w-full h-32 object-cover rounded mb-2" />
+                {% endif %}
+                <h3 class="text-lg font-semibold">{{ restaurant.name }}</h3>
                 <p class="text-sm text-gray-600">{{ restaurant.address }}</p>
                 <p class="text-sm text-gray-600">Horario: {{ restaurant.opening_time }} - {{ restaurant.closing_time }}</p>
-                
-                <!-- Información adicional -->
                 <p class="text-sm text-gray-600">Teléfono: {{ restaurant.phone }}</p>
-                <p class="text-sm text-gray-600">
-                    Página web: 
-                    {% if restaurant.website %}
-                        <a href="{{ restaurant.website }}" class="text-blue-500 hover:underline" target="_blank">{{ restaurant.website }}</a>
-                    {% else %}
-                        No disponible
-                    {% endif %}
-                </p>
+                <p class="text-sm text-gray-600">Página web: {% if restaurant.website %}<a href="{{ restaurant.website }}" class="text-blue-500 hover:underline" target="_blank">{{ restaurant.website }}</a>{% else %} No disponible {% endif %}</p>
                 <p class="text-sm text-gray-600">Categoría: {{ restaurant.category }}</p>
                 <p class="text-sm text-gray-600">Rango de precios: {{ restaurant.price_range }}</p>
-            </li>
+            </div>
             {% endfor %}
-        </ul>
+        </div>
 
         <!-- Mapa -->
-        <div id="map" class="rounded-lg shadow-lg"></div>
+        <div id="map" class="rounded-lg shadow-lg mt-6"></div>
     </div>
 
     <script>
-        // Configuración inicial del mapa centrado en Almería
-        var map = L.map('map').setView([36.8340, -2.4637], 13);
+        // Función para alternar el tema
+        function toggleTheme() {
+            const body = document.body;
+            const isLightTheme = body.classList.contains("light-theme");
+            
+            // Cambiar entre temas claro y oscuro
+            if (isLightTheme) {
+                body.classList.replace("light-theme", "dark-theme");
+                localStorage.setItem("theme", "dark");
+            } else {
+                body.classList.replace("dark-theme", "light-theme");
+                localStorage.setItem("theme", "light");
+            }
+        }
+
+        // Establecer el tema guardado al cargar la página
+        function initTheme() {
+            const savedTheme = localStorage.getItem("theme");
+            if (savedTheme === "dark") {
+                document.body.classList.replace("light-theme", "dark-theme");
+            }
+        }
+
+        // Iniciar el tema guardado cuando se carga la página
+        window.addEventListener("DOMContentLoaded", initTheme);
         
+        // Configuración del mapa y de los restaurantes
+        var map = L.map('map').setView([36.8340, -2.4637], 13);
+
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
             attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
         }).addTo(map);
-    
+
         var markers = [];
-    
-        // Cargar los restaurantes y ubicarlos en el mapa desde el contexto de Django
         var restaurants = [
             {% for restaurant in restaurants %}
             {
@@ -89,31 +137,26 @@
                 'address': '{{ restaurant.address|escapejs }}',
                 'category': '{{ restaurant.category|escapejs }}',
                 'price_range': '{{ restaurant.price_range|escapejs }}',
-                'image_url': '{{ restaurant.image.url|default:"" }}'
             },
             {% endfor %}
         ];
-    
-        // Crear los marcadores en el mapa para cada restaurante
+
         restaurants.forEach(function(restaurant) {
             if (restaurant.lat && restaurant.lng) {
                 var popupContent = `
                     <div style="text-align: center;">
                         <b>${restaurant.name}</b><br>
-                        <img src="${restaurant.image_url}" alt="${restaurant.name}" style="width: 100%; height: 150px; object-fit: cover; border-radius: 8px; margin: 10px 0;">
                         <p>${restaurant.address}</p>
                     </div>
                 `;
-    
                 var marker = L.marker([restaurant.lat, restaurant.lng])
                     .addTo(map)
                     .bindPopup(popupContent);
-    
+
                 markers.push(marker);
             }
         });
-    
-        // Función para resaltar un restaurante en el mapa
+
         function highlightRestaurant(lat, lng) {
             map.setView([lat, lng], 15);
             var selectedMarker = markers.find(m => m.getLatLng().lat === lat && m.getLatLng().lng === lng);
@@ -122,25 +165,25 @@
             }
         }
 
-        // Función para filtrar restaurantes
         function filterRestaurants() {
-            var category = document.getElementById('categoryFilter').value;
-            var price = document.getElementById('priceFilter').value;
-            
-            var restaurantList = document.querySelectorAll('#restaurant-list li');
-            
-            restaurantList.forEach(function(restaurant) {
-                var restaurantCategory = restaurant.getAttribute('data-category');
-                var restaurantPrice = restaurant.getAttribute('data-price');
-    
-                if ((category === "" || restaurantCategory === category) &&
-                    (price === "" || restaurantPrice === price)) {
-                    restaurant.style.display = "block";
-                } else {
-                    restaurant.style.display = "none";
-                }
-            });
+    const category = document.getElementById('categoryFilter').value.toLowerCase();
+    const price = document.getElementById('priceFilter').value.toLowerCase();
+    const restaurantList = document.querySelectorAll('#restaurant-list div');
+
+    restaurantList.forEach(function(restaurant) {
+        const restaurantCategory = restaurant.getAttribute('data-category').toLowerCase();
+        const restaurantPrice = restaurant.getAttribute('data-price').toLowerCase();
+
+        // Mostrar el restaurante solo si coincide con la categoría y el precio seleccionados
+        if ((category === "" || restaurantCategory === category) &&
+            (price === "" || restaurantPrice === price)) {
+            restaurant.style.display = "block";
+        } else {
+            restaurant.style.display = "none";
         }
+    });
+}
+
     </script>
 </body>
 </html>
