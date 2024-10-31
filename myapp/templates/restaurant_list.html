@@ -4,7 +4,12 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>AlmeriaFoodMap</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" integrity="sha384-k6RqeWeci5ZR/Lv4MR0sA0FfDOMT1m4Gg/3J0d6PcC0E2y6bBLgZ4YdbiZ8sCAYe" crossorigin="anonymous">
+
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet"> 
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet" />
     <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
     <style>
@@ -26,18 +31,19 @@
         </svg>
     </div>
 
-    <!-- Título principal con ícono de mapa -->
-    <h1 class="text-3xl font-bold text-center mb-4">
-        <svg xmlns="http://www.w3.org/2000/svg" class="inline-block w-6 h-6 text-red-500 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 20l-5.447-2.724A2 2 0 013 15.382V5.618a2 2 0 011.105-1.794L9 1m0 0l5.447 2.724A2 2 0 0116 5.618v9.764a2 2 0 01-1.105 1.794L9 20z" />
-        </svg>
-        AlmeriaFoodMap
-    </h1>
+ <!-- Título principal con ícono de mapa -->
+ <h1 class="text-3xl font-bold text-center mb-4">
+    <i class="fas fa-map text-red-500 mr-2"></i>
+    AlmeriaFoodMap
+</h1>
+
+
 
     <!-- Imagen de portada -->
-    <div class="relative h-64 w-full">
-        <img src="/static/cabo.jpg" alt="Iglesia de Cabo de Gata" class="object-cover w-full h-full rounded-lg shadow-md" />
+    <div class="relative w-full h-64 md:h-80 lg:h-96 overflow-hidden rounded-lg shadow-md">
+        <img src="/static/cabo.jpg" alt="Iglesia de Cabo de Gata" class="object-cover w-full h-full" />
     </div>
+    
 
     <!-- Pregunta con ícono de comida -->
     <div class="container mx-auto p-4">
@@ -58,10 +64,10 @@
                 <option value="restaurante">Restaurante</option>
             </select>
             <select id="priceFilter" onchange="filterRestaurants()" class="px-3 py-2 border rounded shadow-sm">
-                <option value="">Todos los rangos de precios</option>
-                <option value="económico">Económico</option>
-                <option value="moderado">Moderado</option>
-                <option value="caro">Caro</option>
+                <option value="">Todos</option>
+                <option value="€">Económico</option>
+                <option value="€€">Moderado</option>
+                <option value="€€€">Caro</option>
             </select>
         </div>
 
@@ -84,7 +90,6 @@
             </div>
             {% endfor %}
         </div>
-
 
         <!-- Mapa -->
         <div id="map" class="rounded-lg shadow-lg mt-6"></div>
@@ -119,20 +124,19 @@
 
         var markers = [];
         var restaurants = [
-    // Asegúrate de que la lista de restaurantes tenga las coordenadas adecuadas
-    {% for restaurant in restaurants %}
-    {
-        name: "{{ restaurant.name }}",
-        address: "{{ restaurant.address }}",
-        lat: {{ restaurant.latitude }},
-        lng: {{ restaurant.longitude }},
-        category: "{{ restaurant.category }}",
-        price_range: "{{ restaurant.price_range }}",
-        image: "{% if restaurant.image %}{{ restaurant.image.url }}{% else %}''{% endif %}"
-    },
-    {% endfor %}
-];
-
+            // Asegúrate de que la lista de restaurantes tenga las coordenadas adecuadas
+            {% for restaurant in restaurants %}
+            {
+                name: "{{ restaurant.name }}",
+                address: "{{ restaurant.address }}",
+                lat: {{ restaurant.latitude }},
+                lng: {{ restaurant.longitude }},
+                category: "{{ restaurant.category }}",
+                price_range: "{{ restaurant.price_range }}",
+                image: "{% if restaurant.image %}{{ restaurant.image.url }}{% else %}''{% endif %}"
+            },
+            {% endfor %}
+        ];
 
         restaurants.forEach(function(restaurant) {
             var popupContent = `
@@ -147,45 +151,38 @@
             markers.push(marker);
         });
 
-        // Resaltar el restaurante seleccionado en el mapa
+        // Resalta el restaurante seleccionado
         function highlightRestaurant(lat, lng, name, address) {
             map.setView([lat, lng], 15);
             markers.forEach(marker => {
-                marker.closePopup(); // Cerrar popups anteriores
-                if (marker.getLatLng().lat === lat && marker.getLatLng().lng === lng) {
-                    marker.openPopup(); // Abrir popup del restaurante seleccionado
-                }
+                marker.closePopup();
             });
+            L.marker([lat, lng]).addTo(map).bindPopup(`<b>${name}</b><br>${address}`).openPopup();
         }
 
-        // Filtrar restaurantes por categoría y precio
+        // Filtro de restaurantes
         function filterRestaurants() {
-            var categoryFilter = document.getElementById('categoryFilter').value;
-            var priceFilter = document.getElementById('priceFilter').value;
+    var category = document.getElementById('categoryFilter').value; // Valor de la categoría
+    var price = document.getElementById('priceFilter').value; // Valor del precio
+    var restaurantList = document.querySelectorAll('#restaurant-list div'); // Lista de restaurantes
 
-            markers.forEach(marker => {
-                marker.remove(); // Eliminar todos los marcadores
-            });
-            markers = []; // Reiniciar el arreglo de marcadores
+    restaurantList.forEach(function(restaurant) {
+        var restaurantCategory = restaurant.getAttribute('data-category'); // Obtener categoría del restaurante
+        var restaurantPrice = restaurant.getAttribute('data-price'); // Obtener precio del restaurante
 
-            restaurants.forEach(function(restaurant) {
-                if ((categoryFilter === '' || restaurant.category === categoryFilter) &&
-                    (priceFilter === '' || restaurant.price_range === priceFilter)) {
-                    var popupContent = `
-                        <div style="text-align: center;">
-                            <b>${restaurant.name}</b><br>
-                            <p>${restaurant.address}</p>
-                        </div>
-                    `;
-                    var marker = L.marker([restaurant.lat, restaurant.lng])
-                        .addTo(map)
-                        .bindPopup(popupContent);
-                    markers.push(marker);
-                }
-            });
+        // Imprimir en consola para depuración
+        console.log(`Filtrando restaurante: ${restaurant.innerText}, Precio: ${restaurantPrice}, Filtro de precio: ${price}`);
+
+        // Verifica si el precio y la categoría coinciden
+        if ((category === "" || restaurantCategory === category) &&
+            (price === "" || restaurantPrice === price)) {
+            restaurant.style.display = "block"; // Mostrar restaurante si coincide
+        } else {
+            restaurant.style.display = "none"; // Ocultar si no coincide
         }
+    });
+}
 
-        
     </script>
 </body>
 </html>
