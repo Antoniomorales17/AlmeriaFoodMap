@@ -11,10 +11,12 @@ SECRET_KEY = os.getenv('DJANGO_SECRET_KEY', 'local-secret-key')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 # Activamos DEBUG para ver detalles en local
-DEBUG = os.getenv('DJANGO_DEBUG', 'True') == 'True'
+DEBUG = os.getenv('DJANGO_DEBUG', '') != 'False'
+
 
 # Configuración para desarrollo local
-ALLOWED_HOSTS = ['127.0.0.1', 'localhost']
+ALLOWED_HOSTS = ['*']
+
 
 
 # Application definition
@@ -57,7 +59,8 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'myproject.wsgi.application'
+ASGI_APPLICATION = 'myproject.asgi.application'
+
 
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
