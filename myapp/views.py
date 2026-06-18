@@ -1,4 +1,5 @@
-import requests  # Necesario para realizar solicitudes a la API de Google
+import os
+import requests
 from django.shortcuts import render, redirect, get_object_or_404
 from .models import Restaurant
 from .forms import ReviewForm
@@ -6,7 +7,9 @@ from .forms import ReviewForm
 
 # Función para obtener las coordenadas usando la API de Google Places y guardar en la base de datos
 def obtener_coordenadas_y_guardar(nombre):
-    api_key = 'AIzaSyAyFv6Ofl9Wx2S3kuc1oXaKfNMS6aPpu5E'  # Reemplaza con tu clave API de Google Places
+    api_key = os.getenv('GOOGLE_PLACES_API_KEY', '')
+    if not api_key:
+        return False
     url = f'https://maps.googleapis.com/maps/api/place/findplacefromtext/json?input={nombre}&inputtype=textquery&fields=name,geometry&key={api_key}'
 
     response = requests.get(url)

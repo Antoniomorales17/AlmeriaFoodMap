@@ -18,7 +18,7 @@
             <li>
                 <strong>{{ review.user_name }}</strong> - {{ review.rating }} estrellas
                 <p>{{ review.comment }}</p>
-                <small>Publicado el {{ review.date_posted|date:"d M Y" }}</small>
+                <small>Publicado el {{ review.created_at|date:"d M Y" }}</small>
             </li>
         {% endfor %}
     </ul>
