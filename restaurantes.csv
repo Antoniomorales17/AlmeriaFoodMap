@@ -1,0 +1,9 @@
+name,address,latitude,longitude,category,price_range,description,opening_time,closing_time,phone,website
+El Andaluz,Calle de las Tiendas 12,36.850000,-2.444850,bar,€€,Bar clásico con tapas variadas,10:00,00:00,950123456,
+Casa Puga,Plaza de San Pedro 3,36.840000,-2.400000,bar,€€,Taberna histórica desde 1870,12:00,00:00,950123457,
+La Consentida,Calle del Mar 22,36.840000,-2.460000,restaurante,€€€,Cocina mediterránea de autor,13:00,23:00,950123458,https://laconsentida.es
+Ginos,Calle Granada 50,36.830000,-2.400000,italiano,€€,Pasta y pizza italiana,12:00,23:30,950123459,
+Bar Bonillo,Calle Real 8,36.840000,-2.400001,bar,€,Bar de tapas tradicional,08:00,22:00,950123460,
+Taberna Nuestra Tierra,Plaza de la Constitución 5,36.840000,-2.400000,bar,€€,Taberna andaluza con productos locales,11:00,00:00,950123461,
+Bar El Bombón,Calle Gerona 15,36.840000,-2.400000,bar,€,Desayunos y tapas económicas,07:00,16:00,950123462,
+La Pérgola,Paseo de Almería 30,36.830000,-2.400000,restaurante,€€€,Arroces y mariscos,13:00,23:30,950123463,https://lapergola.es
