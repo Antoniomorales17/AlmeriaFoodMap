@@ -1,16 +1,18 @@
 import csv
+from pathlib import Path
 from django.core.management.base import BaseCommand
 from myapp.models import Restaurant
 
 
 class Command(BaseCommand):
-    help = 'Importa restaurantes desde un archivo CSV'
-
-    def add_arguments(self, parser):
-        parser.add_argument('csv_file', type=str)
+    help = 'Limpia e importa restaurantes desde CSV'
 
     def handle(self, *args, **options):
-        with open(options['csv_file'], newline='', encoding='utf-8') as f:
+        csv_path = Path(__file__).resolve().parent.parent.parent.parent / 'restaurantes.csv'
+
+        Restaurant.objects.all().delete()
+
+        with open(csv_path, newline='', encoding='utf-8') as f:
             reader = csv.DictReader(f)
             count = 0
             for row in reader:
@@ -28,4 +30,4 @@ class Command(BaseCommand):
                     website=row.get('website', ''),
                 )
                 count += 1
-            self.stdout.write(f'Importados {count} restaurantes')
+            self.stdout.write(f'Seed completado: {count} restaurantes')
