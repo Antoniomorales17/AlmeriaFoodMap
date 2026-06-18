@@ -1,9 +1,41 @@
 name,address,latitude,longitude,category,price_range,description,opening_time,closing_time,phone,website
-El Andaluz,Calle de las Tiendas 12,36.850000,-2.444850,bar,€€,Bar clásico con tapas variadas,10:00,00:00,950123456,
-Casa Puga,Plaza de San Pedro 3,36.840000,-2.400000,bar,€€,Taberna histórica desde 1870,12:00,00:00,950123457,
-La Consentida,Calle del Mar 22,36.840000,-2.460000,restaurante,€€€,Cocina mediterránea de autor,13:00,23:00,950123458,https://laconsentida.es
-Ginos,Calle Granada 50,36.830000,-2.400000,italiano,€€,Pasta y pizza italiana,12:00,23:30,950123459,
-Bar Bonillo,Calle Real 8,36.840000,-2.400001,bar,€,Bar de tapas tradicional,08:00,22:00,950123460,
-Taberna Nuestra Tierra,Plaza de la Constitución 5,36.840000,-2.400000,bar,€€,Taberna andaluza con productos locales,11:00,00:00,950123461,
-Bar El Bombón,Calle Gerona 15,36.840000,-2.400000,bar,€,Desayunos y tapas económicas,07:00,16:00,950123462,
-La Pérgola,Paseo de Almería 30,36.830000,-2.400000,restaurante,€€€,Arroces y mariscos,13:00,23:30,950123463,https://lapergola.es
+Casa Puga,Calle Jovellanos 7,36.838800,-2.467900,bar,€€,Taberna histórica desde 1870,12:00,00:00,950231530,https://barcasapuga.es
+Taberna Nuestra Tierra,Calle Jovellanos esq. Marín,36.838500,-2.467700,bar,€€,Productos locales y cocina tradicional,11:00,00:00,679123456,
+Travieso Restaurante,Calle Lentisco 14,36.832500,-2.462500,restaurante,€€€,Cocina contemporánea del chef Dani Muñoz,13:00,17:00,693949786,https://traviesorestaurante.com
+Tony García Espacio Gastronómico,Av. Mediterráneo 281,36.839000,-2.451000,restaurante,€€€,Gastrobar de fusión tradicional y actual,13:00,23:00,950114174,
+Ginés Peregrín,Calle Méndez 6,36.837200,-2.464500,restaurante,€€€,Cocina almeriense con producto local,13:00,23:00,950114174,https://restauranteginesperegrin.es
+VIVO Gourmet,Calle Juan Leiva 14,36.837500,-2.460500,restaurante,€€€,Cocina estacional con influencia peruana,13:30,23:00,950123456,https://vivogourmet.com
+Asador Marino Tinta Negra,Calle Sierra Nevada 14,36.838000,-2.458000,restaurante,€€€,Asador de carnes y pescados a la parrilla,13:00,23:30,950123457,
+Casa Joaquín,Calle Real 111,36.837800,-2.463500,restaurante,€€€,Culto al producto con selección diaria,13:00,23:00,950264359,
+Casa Sevilla,Calle Granada 88,36.837000,-2.463000,restaurante,€€,Cocina tradicional almeriense,13:00,23:00,950123458,
+Bello Rincón,Carretera Cañarete km 5,36.830000,-2.470000,restaurante,€€€,Especialidad en pescados y arroces,13:00,23:30,950123459,
+Bacusº,Av. Juan Carlos I 13 Aguadulce,36.814000,-2.510000,restaurante,€€€,Cocina fusión asiática,13:00,23:00,950123460,
+Alquímico,Puerta de Purchena 1,36.838000,-2.465000,restaurante,€€€,Cocina moderna para compartir,13:30,23:00,950123461,
+Katsu Izakaya,Calle Javier Sanz 4,36.837500,-2.465500,restaurante,€€,Fusión japonesa-mediterránea,13:30,23:30,950123462,https://katsuizakaya.com
+Errante,Calle General Tamayo 10,36.836500,-2.464000,restaurante,€€€,Fusión de cocinas internacionales,13:30,23:00,950123463,
+El Andaluz,Calle Felipe II 80,36.834500,-2.455000,bar,€€,Bar de tapas clásico,07:00,00:00,950142324,https://tabernaelandaluz.es
+Bar MaRobles,Calle Estadio 54,36.833000,-2.458000,bar,€,Cafetería con tapas caseras,07:30,23:00,950123464,
+Bar El Chele,Calle Lucerna 3,36.832500,-2.457000,bar,€,Tapas de pescado tradicional,08:00,22:00,950123465,
+Cervecería 4J,Av. Cabo de Gata 46,36.829000,-2.456000,bar,€,Cervecería con tapas variadas,10:00,00:00,695695059,
+Salitre Bar de Vinos,Calle Real 40,36.838000,-2.465000,bar,€€,Bar de vinos con cocina honesta,12:00,00:00,950123466,https://salitrebardevinos.es
+Cervecería El Alcázar,Calle Ricardos 7,36.838500,-2.466500,bar,€,Bar de tapas clásico del centro,08:00,22:00,950123467,
+Cuatro Hojas,Plaza Vieja 3,36.838200,-2.466800,restaurante,€€€,Gastrobar de cocina de autor,13:00,23:00,950123468,
+Bodega y Mar,Calle Antonio González Egea 5,36.837000,-2.460000,restaurante,€€€,Mariscos frescos y cocina contemporánea,13:00,23:30,950123469,
+La Casualidad,Calle Costa Balear 8,36.835000,-2.453000,restaurante,€€,Cocina mediterránea con toque creativo,13:00,23:00,950123470,
+AMOR Gastronomía,Calle La Marina 12,36.836000,-2.460000,italiano,€€€,Pizza y cocina italiana de autor,13:00,23:30,950123471,
+Koisushi Almería,Calle Argentinita 3,36.832000,-2.450000,restaurante,€€,Cocina japonesa y sushi,13:30,23:30,950123472,
+Joseba Añorga Taberna,Calle Trajano 10,36.836500,-2.463000,bar,€€,Taberna de producto con toque vasco,11:00,23:00,950123473,
+Alinea,Calle Sierra Alhamilla 5 Roquetas,36.764000,-2.614000,restaurante,€€€,Cocina tradicional e internacional,13:00,23:00,950123474,
+Arcilla,Calle Méndez Núñez 12 Mojácar,37.140000,-1.851000,restaurante,€€€,Guisos arroces y producto de proximidad,13:00,23:00,950123475,
+La Villa,Calle Ensenada s/n Agua Amarga,36.939000,-1.938000,restaurante,€€€,Cocina de brasas y producto fresco,13:30,23:00,950123476,
+Samambar,Calle Real s/n Rodalquilar,36.834000,-2.016000,restaurante,€€€,Producto almeriense y vinos naturales,13:30,23:00,950123477,
+Juan Moreno,Plaza Toros s/n Vera,37.246000,-1.869000,restaurante,€€€,Referente del Levante almeriense,13:00,23:00,950123478,
+Terraza Carmona,Av. Mediterráneo s/n Vera,37.245000,-1.868000,restaurante,€€€,Cocina de raíz con producto cercano,13:00,23:00,950123479,
+Bodega Los Finos,Calle San Juan 22,36.837800,-2.466000,bar,€€,Bodega con vinos y tapas selectas,12:00,00:00,950123480,
+Doña Lola Taberna Selecta,Plaza San Sebastián 10,36.837500,-2.466500,bar,€€,Taberna selecta con tapas gourmet,11:00,23:00,950123481,
+La Consentida,Calle Mar 22,36.836000,-2.462000,restaurante,€€,Cocina mediterránea casera,13:00,23:00,950123482,
+Ginos,Calle Granada 50,36.837200,-2.464000,italiano,€€,Pasta y pizza italiana,12:00,23:30,950123483,
+Taberna El Andaluz,Calle Tiendas 12,36.838500,-2.467000,bar,€€,Tapas variadas y ambiente tradicional,10:00,00:00,950123484,
+Bar El Bombón,Calle Gerona 15,36.836800,-2.463500,bar,€,Desayunos y tapas económicas,07:00,16:00,950123485,
+La Pérgola,Paseo Almería 30,36.838000,-2.464000,restaurante,€€,Arroces y mariscos,13:00,23:30,950123486,
+4 Nudos,Av. Cabo de Gata 24,36.830000,-2.457000,bar,€€,Cervecería con tapas variadas,10:00,00:00,950123487,
