@@ -1,6 +1,7 @@
 import os
 import requests
 from django.shortcuts import render, redirect, get_object_or_404
+from django.http import HttpResponse
 from .models import Restaurant
 from .forms import ReviewForm
 
@@ -58,6 +59,11 @@ def agregar_bar(request):
             return render(request, 'error.html', {'message': 'No se encontró el lugar.'})
     
     return render(request, 'agregar_bar.html')
+
+def seed_view(request):
+    from django.core.management import call_command
+    call_command('seed_restaurants')
+    return HttpResponse('Restaurantes importados correctamente')
 
 def restaurant_detail(request, restaurant_id):
     restaurant = get_object_or_404(Restaurant, id=restaurant_id)

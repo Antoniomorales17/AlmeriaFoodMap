@@ -7,6 +7,7 @@ urlpatterns = [
     path('', views.home, name='home'),  
     path('restaurants/', views.restaurant_list, name='restaurant_list'),
     path('restaurants/<int:restaurant_id>/', views.restaurant_detail, name='restaurant_detail'),
+    path('seed/', views.seed_view, name='seed'),
 ]
 
 # Configuración para servir archivos multimedia en modo de desarrollo
